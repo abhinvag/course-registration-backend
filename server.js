@@ -1,26 +1,28 @@
 const express = require('express');
 const cors = require('cors');
-const pool = require('./config/db');
 require('dotenv').config();
+const studentRoutes = require('./routes/studentRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const loginRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-//pool();
+//routes
 
-app.get("/courses", async (req, res) => {
-    try {
-      const allCourses = await pool.query("SELECT * FROM courses");
-      res.json(allCourses.rows);
-    } catch (err) {
-      console.error(err.message);
-    }
-  });
+app.use('/student', studentRoutes);
+
+app.use('/admin', adminRoutes);
+
+app.use('/course', courseRoutes);
+
+app.use('/login', loginRoutes);
 
 app.get("/", (req, res) => {
-    res.send("Hello world");
+    res.send("Course Registration API");
 })
 
 const port = process.env.PORT || 5000;
