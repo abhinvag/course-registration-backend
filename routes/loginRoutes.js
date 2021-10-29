@@ -18,11 +18,16 @@ router.post('/register', function(req, res){ // register user
     try{
         bcrypt.hash(req.body.passw, saltRounds, async function(err, hash) {
             if(hash){
-                await pool.query(
-                    "INSERT INTO login VALUES ($1, $2, $3);",
-                    [req.body.usertype, req.body.userId, hash]
-                );
-                res.json("Success");
+                try{
+                    await pool.query(
+                        "INSERT INTO login VALUES ($1, $2, $3);",
+                        [req.body.usertype, req.body.userId, hash]
+                    );
+                    res.json("Success");
+                }
+                catch(err){
+                    console.log(err);
+                }
             }
             else{
                 console.log(err);
