@@ -16,20 +16,17 @@ create table student(
 
 create table course(
     course_id varchar(255) PRIMARY KEY,
-    coursename varchar(255) UNIQUE 
+    coursename varchar(255) UNIQUE, 
+    type varchar(255) CHECK (type='COMPULSORY' OR type='ELECTIVE'),
+    credits INT
 );
 
-create table courseDetail(
-    coursename varchar(255)  PRIMARY KEY,
-    type varchar(255),
-    credits INT,
-	FOREIGN KEY (coursename) REFERENCES course(coursename)
-);
-
-create table courseAvailibilty(
+create table availableCourses(
     course_id varchar(255),
     semester INT,
-    branch varchar(255),
+    branch varchar(255) NOT NULL,
+    availableSeats INT,
+    totalSeats INT,
     FOREIGN KEY (course_id) REFERENCES course(course_id),
     PRIMARY KEY(course_id, semester, branch)
 );
@@ -37,9 +34,10 @@ create table courseAvailibilty(
 create table courseEnrollment(
     course_id varchar(255) ,
     student_id varchar(255) ,
-    dateofEnrollment Date, FOREIGN KEY (student_id) REFERENCES student(userId), 
+    dateofEnrollment Date, 
+    FOREIGN KEY (student_id) REFERENCES student(userId), 
     FOREIGN KEY (course_id) REFERENCES course(course_id),
-    PRIMARY KEY(course_id,student_id)
+    PRIMARY KEY(course_id,student_id, dateofEnrollment)
 );
 
 
