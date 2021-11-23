@@ -5,7 +5,7 @@ const pool = require('../config/db');
 let router = express.Router();
 const saltRounds = 10;
 
-router.get("/list", async (req, res) => { // list of all the entries in login table
+router.get("/list", async (req, res) => { // list of all the entries in admin table
     try {
       const admininfo = await pool.query("SELECT * FROM admin");
       res.json(admininfo.rows);
