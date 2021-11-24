@@ -6,9 +6,9 @@
 | :--: | :---------------------: | :----------------------------------------------------: | :-----------------------------------------------------------------: |
 | GET  |      /student/list      |                           -                            |                Get all the entries in student table                 |
 | POST |    /student/register    | userId, name, joining_year, Student_DOB, Branch, passw |                       Register a new student                        |
-| Post |     /student/verify     |                     userId, passw                      |                    Verify password for a student                    |
-| Post | /student/updatePassword |                userId, passw, newpassw                 |      update password with new password using existing password      |
-| Post | /student/resetPassword  |                         userId                         | New password is created and mailed to user using which he can login |
+| POST |     /student/verify     |                     userId, passw                      |                    Verify password for a student                    |
+| POST | /student/updatePassword |                userId, passw, newpassw                 |      update password with new password using existing password      |
+| POST | /student/resetPassword  |                         userId                         | New password is created and mailed to user using which he can login |
 
 ## Admin
 
@@ -16,7 +16,7 @@
 | :--: | :-------------: | :----------------------: | :--------------------------------: |
 | GET  |   /admin/list   |            -             | Get all the entries in admin table |
 | POST | /admin/register | userId, name, DOB, passw |        Register a new admin        |
-| Post |  /admin/verify  |      userId, passw       |    Verify password for a admin     |
+| POST |  /admin/verify  |      userId, passw       |    Verify password for a admin     |
 
 ## Course
 
