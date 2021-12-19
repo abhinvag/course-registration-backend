@@ -57,11 +57,20 @@ router.post('/verify', async function(req, res){ // verify password
         else{
             bcrypt.compare(req.body.passw, User.rows[0].passw, function(err, result) {
                 if(!err){
-                    res.json(result); // returns true if password matches
+                    if(result){
+                        var dummy = {
+                            userId : User.rows[0].userid,
+                            name : User.rows[0].name
+                        }
+                        res.json(dummy); 
+                    }
+                    else{
+                        res.json("Incorrect Password");
+                    }
                 }
                 else{
                     console.log(err);
-                    res.json("Incorrect Password");
+                    res.json("error");
                 }
             });
         }
