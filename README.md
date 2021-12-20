@@ -20,19 +20,22 @@
 
 ## Course
 
-| Type |               Route               |             Path Parameters             |                                       Description                                        |
-| :--: | :-------------------------------: | :-------------------------------------: | :--------------------------------------------------------------------------------------: |
-| GET  |           /course/list            |                    -                    |                           Get all the entries in course table                            |
-| POST |       /course/addNewCourse        |  course_id, coursename, type, credits   |                              Add New course in course table                              |
-| POST |       /course/updateCourse        |  course_id, coursename, type, credits   |                          Update Exisitng course in course table                          |
-| POST |       /course/deleteCourse        |                course_id                | Delete all entries of course_id from courseEnrollment, availableCourses and course table |
-| POST |    /course/addAvailableCourse     | course_id, semester, branch, totalSeats |               Add new availibility for a course in availableCourses tables               |
-| POST |   /course/updateAvailableCourse   | course_id, semester, branch, totalSeats |               Update availibility for a course in availableCourses tables                |
-| POST |  /course/decreaseAvailableSeats   |                course_id                |                   Decreases seats available in a course by 1 if not 0                    |
-| POST |   /course/deleteAvailableCourse   |                course_id                |               Delete availibility for a course in availableCourses tables                |
-| POST |    /course/courseAvailibility     |                course_id                |                  Get all different availibility for a particular course                  |
-| POST |   /course/availableCoursesInSem   |                semester                 |                              Get all courses in a semester                               |
-| POST | /course/availableCoursesForBranch |                 branch                  |                               Get all courses for a branch                               |
+| Type |               Route               |               Path Parameters                |                                       Description                                        |
+| :--: | :-------------------------------: | :------------------------------------------: | :--------------------------------------------------------------------------------------: |
+| GET  |           /course/list            |                      -                       |                           Get all the entries in course table                            |
+| POST |       /course/addNewCourse        |     course_id, coursename, type, credits     |                              Add New course in course table                              |
+| POST |       /course/updateCourse        |     course_id, coursename, type, credits     |                          Update Exisitng course in course table                          |
+| POST |       /course/deleteCourse        |                  course_id                   | Delete all entries of course_id from courseEnrollment, availableCourses and course table |
+| POST |    /course/addAvailableCourse     | course_id, semester, branch, totalSeats, grp |               Add new availibility for a course in availableCourses tables               |
+| POST |  /course/decreaseAvailableSeats   |         course_id, semester, branch          |                   Decreases seats available in a course by 1 if not 0                    |
+| POST |  /course/increaseAvailableSeats   |         course_id, semester, branch          |                        Increases seats available in a course by 1                        |
+| POST |   /course/deleteAvailableCourse   |         course_id, semester, branch          |               Delete availibility for a course in availableCourses tables                |
+| GET  | /course/deleteAllAvailableCourse  |                      -                       |                      Delete all entries in availableCourses tables                       |
+| POST |    /course/courseAvailibility     |                  course_id                   |                  Get all different availibility for a particular course                  |
+| POST |   /course/availableCoursesInSem   |                   semester                   |                              Get all courses in a semester                               |
+| POST | /course/availableCoursesForBranch |                    branch                    |                               Get all courses for a branch                               |
+| POST |   /course/getCompulsoryCourses    |               branch,semester                |              Get list of all the compulsory courses for a sem branch combo               |
+| POST |    /course/getElectiveCourses     |               branch,semester                |               Get list of all the elective courses for a sem branch combo                |
 
 ---
 

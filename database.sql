@@ -27,17 +27,17 @@ create table availableCourses(
     branch varchar(255) NOT NULL,
     availableSeats INT,
     totalSeats INT,
+    grp varchar(255),
     FOREIGN KEY (course_id) REFERENCES course(course_id),
     PRIMARY KEY(course_id, semester, branch)
 );
 
 create table courseEnrollment(
     course_id varchar(255) ,
-    student_id varchar(255) ,
-    dateofEnrollment Date, 
+    student_id varchar(255) , 
     FOREIGN KEY (student_id) REFERENCES student(userId), 
     FOREIGN KEY (course_id) REFERENCES course(course_id),
-    PRIMARY KEY(course_id,student_id, dateofEnrollment)
+    PRIMARY KEY(course_id,student_id)
 );
 
 

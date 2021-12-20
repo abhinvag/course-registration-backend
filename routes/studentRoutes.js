@@ -13,7 +13,7 @@ router.get("/list", async (req, res) => { // list of all the entries in student 
       const studentinfo = await pool.query("SELECT * FROM student");
       res.json(studentinfo.rows);
     } catch (err) {
-      console.error(err.message);
+      res.json(err);
     }
 });
 
@@ -30,18 +30,15 @@ router.post('/register', function(req, res){ // register user
                     res.json("Success");
                 }
                 catch(err){
-                    console.log(err);
-                    res.json("error");
+                    res.json(err);
                 }
             }
             else{
-                console.log(err);
-                res.json("error");
+                res.json(err);
             }
         });
     }catch(err){
-        console.log(err);
-        res.json("error");
+        res.json(err);
     }
 })
 
@@ -60,7 +57,9 @@ router.post('/verify', async function(req, res){ // verify password
                     if(result){
                         var dummy = {
                             userId : User.rows[0].userid,
-                            name : User.rows[0].name
+                            name : User.rows[0].name,
+                            joining_year : User.rows[0].joining_year,
+                            Branch: User.rows[0].branch
                         }
                         res.json(dummy); 
                     }
@@ -69,14 +68,12 @@ router.post('/verify', async function(req, res){ // verify password
                     }
                 }
                 else{
-                    console.log(err);
-                    res.json("error");
+                    res.json(err);
                 }
             });
         }
     }catch(err){
-        console.log(err);
-        res.json("error");
+        res.json(err);
     }
 })
 
@@ -102,8 +99,7 @@ router.post('/updatePassword', async function(req, res){ // update password with
                                 res.json("Success");
                             }
                             else{
-                                res.json("Error");
-                                console.log(err);
+                                res.json(err);
                             }
                         });
                     }
@@ -112,14 +108,12 @@ router.post('/updatePassword', async function(req, res){ // update password with
                     }
                 }
                 else{
-                    res.json("Error");
-                    console.log(err);
+                    res.json(err);
                 }
             });
         }
     }catch(err){
-        res.json("Error");
-        console.log(err);
+        res.json(err);
     }
 })
 
@@ -172,8 +166,7 @@ router.post("/resetPassword", async (req, res) => {
 
                     transporter.sendMail(mailOptions, function(err, data) {
                         if (err) {
-                            console.log(err);
-                            res.json("error")
+                            res.json(err);
                         } 
                         else {
                             res.json("success");
@@ -181,15 +174,13 @@ router.post("/resetPassword", async (req, res) => {
                     });
                 }
                 else{
-                    res.json("Error");
-                    console.log(err);
+                    res.json(err);
                 }
             })
         }
     }
     catch(err){
-        console.log(err);
-        res.json("error");
+        res.json(err);
     }
 })
 

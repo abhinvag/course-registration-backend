@@ -10,7 +10,7 @@ router.get("/list", async (req, res) => { // list of all the entries in admin ta
       const admininfo = await pool.query("SELECT * FROM admin");
       res.json(admininfo.rows);
     } catch (err) {
-      console.error(err.message);
+        res.json(err);
     }
 });
 
@@ -26,18 +26,15 @@ router.post('/register', function(req, res){ // register user
                     res.json("Success");
                 }
                 catch(err){
-                    console.log(err);
-                    res.json("error");
+                    res.json(err);
                 }
             }
             else{
-                console.log(err);
-                res.json("error");
+                res.json(err);
             }
         });
     }catch(err){
-        console.log(err);
-        res.json("error");
+        res.json(err);
     }
 })
 
@@ -65,14 +62,12 @@ router.post('/verify', async function(req, res){ // verify password
                     }
                 }
                 else{
-                    console.log(err);
-                    res.json("error")
+                    res.json(err);
                 }
             });
         }
     }catch(err){
-        console.log(err);
-        res.json("error");
+        res.json(err);
     }
 })
 
