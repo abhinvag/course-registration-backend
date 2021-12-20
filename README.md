@@ -39,7 +39,13 @@
 
 ---
 
-# How to Run Locally
+# Database Design
+
+![Database Design](/assets/dbdesign.png)
+
+---
+
+# How to Run Locally ?
 
 ```
 npm install
@@ -62,6 +68,12 @@ OAUTH_CLIENT_SECRET=''
 OAUTH_REFRESH_TOKEN=''
 ```
 
+## Database Access
+
+```
+heroku pg:psql -a course-registration-lnmiit
+```
+
 ---
 
 # Tech Used
@@ -69,3 +81,7 @@ OAUTH_REFRESH_TOKEN=''
 - NodeJs
 - ExpressJs
 - PostgreSQL
+
+# Links
+
+[Frontend Code](https://github.com/Abhishekkr3003/Course-Registration)
