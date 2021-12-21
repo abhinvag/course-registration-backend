@@ -8,6 +8,15 @@ require("dotenv").config();
 let router = express.Router();
 const saltRounds = 10;
 
+/*
+TODO:
+* Add Multiple Students
+* Delete Student
+* Edit Student
+* Get List of Students by branch
+* Get List of Students by Sem
+*/
+
 router.get("/list", async (req, res) => { // list of all the entries in student table
     try {
       const studentinfo = await pool.query("SELECT * FROM student");
@@ -183,6 +192,7 @@ router.post("/resetPassword", async (req, res) => {
         res.json(err);
     }
 })
+ 
 
 module.exports = router;
 

@@ -25,6 +25,27 @@ router.post("/addNewCourse", async (req, res) => {
   }
 })
 
+router.post("/addMultipleNewCourse", (req, res) => { 
+  var list = req.body.list;
+  try{
+    list.map(async (course) => {
+      try{
+        await pool.query(
+          "INSERT INTO course values ($1, $2, $3, $4);",
+          [course.course_id, course.coursename, course.type, course.credits]
+        );
+      }
+      catch(err){
+        res.json(err)
+      }
+    })
+    res.json("success");
+  }
+  catch(err){
+    res.json(err);
+  }
+})
+
 router.post("/updateCourse", async (req, res) => {
   try{
     await pool.query(
@@ -69,6 +90,27 @@ router.post("/addAvailableCourse", async (req, res) => {
   }
   catch(err){
     res.json(err);
+  }
+})
+
+router.post("/addMultipleAvailableCourse", async (req, res) => {
+  var list = req.body.list;
+  try{
+    list.map(async (course) => {
+      try{
+        await pool.query(
+          "INSERT INTO availableCourses VALUES ($1, $2, $3, $4, $5, $6);",
+          [course.course_id, course.semester, course.branch, course.totalSeats, course.totalSeats, course.grp]
+        )
+      }
+      catch(err){
+        res.json(err);
+      }
+    })
+    res.json("success");
+  }
+  catch(err){
+    res.send(err);
   }
 })
 
@@ -208,13 +250,93 @@ router.post("/getElectiveCourses", async (req, res) => {
     res.json(err);
   }
 })
+
+router.post("/addEnrollment", async (req, res) => {
+  try{
+    await pool.query(
+      "insert into courseEnrollment values ($1, $2);",
+      [req.body.course_id, req.body.student_id]
+    )
+    res.json("success");
+  }
+  catch(err){
+    res.json(err);
+  }
+})
+
+router.post("/addMultipleEnrollment", async (req, res) => {
+  var list = req.body.list;
+  try{
+    list.map(async (enrollment) => {
+      try{
+        await pool.query(
+          "insert into courseEnrollment values ($1, $2);",
+          [enrollment.course_id, enrollment.student_id]
+        )
+      }
+      catch(err){
+        res.json(err);
+      }
+    })
+    res.json("success");
+  }
+  catch(err){
+    res.send(err);
+  }
+})
+
+router.post("/deleteEnrollment", async (req, res) => {
+  try{
+    await pool.query(
+      "delete from courseEnrollment where course_id=$1 and student_id=$2",
+      [req.body.course_id, req.body.student_id]
+    )
+    res.json("success");
+  }
+  catch(err){
+    res.json(err);
+  }
+})
+
+router.post("/getEnrolledStudents", async (req, res) => {
+  try{
+    const data = await pool.query(
+      "select tbl2.userid, name, joining_year, branch from (select * from courseEnrollment where course_id=$1) tbl1 inner join (select * from student ) tbl2 on tbl1.student_id = tbl2.userid;",
+      [req.body.course_id]
+    )
+    res.json(data.rows);
+  }
+  catch(err){
+    res.json(err);
+  }
+})
+
+router.post("/getEnrolledCourses", async (req, res) => {
+  try{
+    const data = await pool.query(
+      "select tbl1.course_id, coursename, type, credits from (select * from courseEnrollment where student_id=$1) tbl1 inner join (select * from course ) tbl2 on tbl1.course_id = tbl2.course_id;",
+      [req.body.student_id]
+    )
+    res.json(data.rows);
+  }
+  catch(err){
+    res.json(err);
+  }
+})
+
+router.post("/isEnrolledInCourse", async (req, res) => {
+  try{
+    const data = await pool.query(
+      "select * from courseEnrollment where course_id=$1 and student_id=$2;",
+      [req.body.course_id, req.body.student_id]
+    )
+    if(data.rows.length === 1) res.json(true);
+    else res.json(false);
+  }
+  catch(err){
+    res.json(err);
+  }
+})
  
-
-
-
-
-
-
-
 
 module.exports = router; 

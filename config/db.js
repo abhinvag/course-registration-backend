@@ -13,3 +13,7 @@ const pool = new Pool({
 });
 
 module.exports = pool;
+
+/* ssl:{
+    rejectUnauthorized: false
+} */
