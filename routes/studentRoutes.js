@@ -10,9 +10,6 @@ const saltRounds = 10;
 
 /*
 TODO:
-* Add Multiple Students
-* Delete Student
-* Edit Student
 * Get List of Students by branch
 * Get List of Students by Sem
 */
@@ -50,6 +47,36 @@ router.post('/register', function(req, res){ // register user
         res.json(err);
     }
 })
+
+router.post('/registerMultiple', function(req, res){
+    var list = req.body.list;
+    try{
+        list.map(async (student) => {
+            try{
+                bcrypt.hash(student.passw, saltRounds, async function(err, hash) {
+                    if(hash){
+                        await pool.query(
+                            "INSERT INTO student VALUES ($1, $2, $3, $4, $5, $6);",
+                            [student.userId, student.name, student.joining_year , student.Student_DOB, 
+                                student.Branch, hash]
+                        );
+                    }
+                    else{
+                        res.json(err);
+                    }
+                });
+            }
+            catch(err){
+                res.send(err);
+            }
+        })
+        res.json("success")
+    } 
+    catch(err){
+        res.send(err);
+    }
+})
+
 
 router.post('/verify', async function(req, res){ // verify password
     try{
@@ -193,6 +220,66 @@ router.post("/resetPassword", async (req, res) => {
     }
 })
  
+router.post("/delete", async (req, res) => {
+    try{
+        await pool.query(
+            "delete from student where userid=$1;",
+            [req.body.userId]
+        )
+        res.json("success");
+    }catch(err){
+        res.json(err);
+    }
+})
+
+router.post("/update", async (req, res) => {
+    try{
+        await pool.query(
+            "update student set name=$2, joining_year=$3, student_dob=$4, branch=$5 where userid=$1;",
+            [req.body.userId, req.body.name, req.body.joining_year , req.body.Student_DOB, 
+                req.body.Branch]
+        )
+        res.json("success");
+    }catch(err){
+        res.json(err);
+    }
+})
+
+router.post("/getStudentsByBranch", async (req, res) => {
+    try{
+        const data = await pool.query(
+            "select userId, name, joining_year, Student_DOB from student where branch=$1;",
+            [req.body.Branch]
+        )
+        res.json(data.rows);
+    }catch(err){
+        res.json(err);
+    }
+})
+
+router.post("/getStudentsByYear", async (req, res) => {
+    try{
+        const data = await pool.query(
+            "select userid, name, student_dob, Branch from student where joining_year=$1;",
+            [req.body.joining_year]
+        )
+        res.json(data.rows);
+    }catch(err){
+        res.json(err);
+    }
+})
+
+router.post("/getStudentsByBranchAndYear", async (req, res) => {
+    try{
+        const data = await pool.query(
+            "select userid, name, student_dob from student where branch=$1 and joining_year=$2;",
+            [req.body.Branch, req.body.joining_year]
+        )
+        res.json(data.rows);
+    }catch(err){
+        res.json(err);
+    }
+})
 
 module.exports = router;
 

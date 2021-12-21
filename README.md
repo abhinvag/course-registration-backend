@@ -2,13 +2,19 @@
 
 ## Student
 
-| Type |          Route          |                    Path Parameters                     |                             Description                             |
-| :--: | :---------------------: | :----------------------------------------------------: | :-----------------------------------------------------------------: |
-| GET  |      /student/list      |                           -                            |                Get all the entries in student table                 |
-| POST |    /student/register    | userId, name, joining_year, Student_DOB, Branch, passw |                       Register a new student                        |
-| POST |     /student/verify     |                     userId, passw                      |                    Verify password for a student                    |
-| POST | /student/updatePassword |                userId, passw, newpassw                 |      update password with new password using existing password      |
-| POST | /student/resetPassword  |                         userId                         | New password is created and mailed to user using which he can login |
+| Type |                Route                |                         Path Parameters                         |                             Description                             |
+| :--: | :---------------------------------: | :-------------------------------------------------------------: | :-----------------------------------------------------------------: |
+| GET  |            /student/list            |                                -                                |                Get all the entries in student table                 |
+| POST |          /student/register          |     userId, name, joining_year, Student_DOB, Branch, passw      |                       Register a new student                        |
+| POST |      /student/registerMultiple      | list:[{userId, name, joining_year, Student_DOB, Branch, passw}] |                     Register multiple students                      |
+| POST |           /student/verify           |                          userId, passw                          |                    Verify password for a student                    |
+| POST |       /student/updatePassword       |                     userId, passw, newpassw                     |      update password with new password using existing password      |
+| POST |       /student/resetPassword        |                             userId                              | New password is created and mailed to user using which he can login |
+| POST |           /student/delete           |                             userId                              |                           Delete student                            |
+| POST |           /student/update           |         userId, name, joining_year, Student_DOB, Branch         |                           Update student                            |
+| POST |    /student/getStudentsByBranch     |                             Branch                              |                 List of students with given branch                  |
+| POST |     /student/getStudentsByYear      |                          joining_year                           |              List of students with given Joining Year               |
+| POST | /student/getStudentsByBranchAndYear |                      Branch, joining_year                       |         List of students with given branch and Joining Year         |
 
 ## Admin
 
