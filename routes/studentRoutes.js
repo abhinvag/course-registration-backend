@@ -229,6 +229,10 @@ router.post("/resetPassword", async (req, res) => {
 router.post("/delete", async (req, res) => {
     try{
         await pool.query(
+            "delete from courseEnrollment where student_id=$1;",
+            [req.body.userId]
+        )
+        await pool.query(
             "delete from student where userid=$1;",
             [req.body.userId]
         )
