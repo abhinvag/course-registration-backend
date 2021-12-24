@@ -1,6 +1,9 @@
 const express = require('express');
 let router = express.Router();
 const pool = require('../config/db');
+var multer = require("multer");
+var upload = multer();
+const xlsx = require('xlsx');
 
 router.get("/list", async (req, res) => { // List of all the courses 
     try {
@@ -25,9 +28,14 @@ router.post("/addNewCourse", async (req, res) => {
   }
 })
 
-router.post("/addMultipleNewCourse", (req, res) => { 
-  var list = req.body.list;
+router.post("/addMultipleNewCourse", upload.single('file'), (req, res) => { 
   try{
+    const data = req.file.buffer;
+    const wb = xlsx.read(data);
+    const ws = wb.Sheets["Sheet1"];
+    const list = xlsx.utils.sheet_to_json(ws, {
+        raw: false,
+    });
     list.map(async (course) => {
       try{
         await pool.query(
@@ -80,7 +88,7 @@ router.post("/deleteCourse", async (req, res) => {
   }
 })
 
-router.post("/addAvailableCourse", async (req, res) => {
+router.post("/addAvailableCourse",  async (req, res) => {
   try{
     await pool.query(
       "INSERT INTO availableCourses VALUES ($1, $2, $3, $4, $5, $6);",
@@ -93,9 +101,14 @@ router.post("/addAvailableCourse", async (req, res) => {
   }
 })
 
-router.post("/addMultipleAvailableCourse", async (req, res) => {
-  var list = req.body.list;
+router.post("/addMultipleAvailableCourse", upload.single('file'), async (req, res) => {
   try{
+    const data = req.file.buffer;
+    const wb = xlsx.read(data);
+    const ws = wb.Sheets["Sheet1"];
+    const list = xlsx.utils.sheet_to_json(ws, {
+        raw: false,
+    });
     list.map(async (course) => {
       try{
         await pool.query(
@@ -114,10 +127,10 @@ router.post("/addMultipleAvailableCourse", async (req, res) => {
   }
 })
 
-/* router.post("/updateAvailableCourse", async (req, res) => {
+/router.post("/updateTotalSeats", async (req, res) => {
   try{
     await pool.query(
-      "UPDATE availableCourses SET semester=$2, branch=$3, availableSeats=$4, totalSeats=$4 WHERE course_id=$1",
+      "UPDATE availableCourses SET totalSeats=$4 WHERE course_id=$1 AND semester=$2 AND branch=$3",
       [req.body.course_id, req.body.semester, req.body.branch, req.body.totalSeats]
     )
     res.json("success");
@@ -125,7 +138,7 @@ router.post("/addMultipleAvailableCourse", async (req, res) => {
   catch(err){
     res.json(err);
   }
-}) */
+}) 
 
 router.post("/decreaseAvailableSeats", async (req, res) => {
   try {
@@ -264,9 +277,14 @@ router.post("/addEnrollment", async (req, res) => {
   }
 })
 
-router.post("/addMultipleEnrollment", async (req, res) => {
-  var list = req.body.list;
+router.post("/addMultipleEnrollment",upload.single('file'), async (req, res) => {
   try{
+    const data = req.file.buffer;
+    const wb = xlsx.read(data);
+    const ws = wb.Sheets["Sheet1"];
+    const list = xlsx.utils.sheet_to_json(ws, {
+        raw: false,
+    });
     list.map(async (enrollment) => {
       try{
         await pool.query(

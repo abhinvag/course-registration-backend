@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 const pool = require('../config/db');
 const generator = require('generate-password');
 const nodemailer = require('nodemailer');
+var multer = require("multer");
+var upload = multer();
+const xlsx = require('xlsx');
 require("dotenv").config();
 
 let router = express.Router();
@@ -48,32 +51,35 @@ router.post('/register', function(req, res){ // register user
     }
 })
 
-router.post('/registerMultiple', function(req, res){
-    var list = req.body.list;
+router.post('/registerMultiple', upload.single('file'), function(req, res){
     try{
-        list.map(async (student) => {
-            try{
-                bcrypt.hash(student.passw, saltRounds, async function(err, hash) {
-                    if(hash){
-                        await pool.query(
-                            "INSERT INTO student VALUES ($1, $2, $3, $4, $5, $6);",
-                            [student.userId, student.name, student.joining_year , student.Student_DOB, 
-                                student.Branch, hash]
-                        );
-                    }
-                    else{
-                        res.json(err);
-                    }
-                });
-            }
-            catch(err){
-                res.send(err);
-            }
+        const data = req.file.buffer;
+        const wb = xlsx.read(data);
+        const ws = wb.Sheets["Sheet1"];
+        const list = xlsx.utils.sheet_to_json(ws, {
+            raw: false,
+        });
+        //console.log(list);
+        list.map((student) => {
+            let passw = student.passw;
+            let stringPassw = passw.toString();
+            bcrypt.hash(stringPassw, saltRounds, async function(err, hash) {
+                if(hash){
+                    await pool.query(
+                        "INSERT INTO student VALUES ($1, $2, $3, $4, $5, $6);",
+                        [student.userId, student.name, student.joining_year , student.Student_DOB, 
+                            student.Branch, hash]
+                    );
+                }
+                else{
+                    console.log(err);
+                }
+            });
         })
         res.json("success")
-    } 
+    }
     catch(err){
-        res.send(err);
+        res.json(err)
     }
 })
 
