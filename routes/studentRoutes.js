@@ -101,7 +101,7 @@ router.post('/verify', async function(req, res){ // verify password
                             userid : User.rows[0].userid,
                             name : User.rows[0].name,
                             joining_year : User.rows[0].joining_year,
-                            Branch: User.rows[0].branch
+                            branch: User.rows[0].branch
                         }
                         res.json(dummy); 
                     }
