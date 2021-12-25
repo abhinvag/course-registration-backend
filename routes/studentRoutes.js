@@ -258,7 +258,7 @@ router.post("/update", async (req, res) => {
 router.post("/getStudentsByBranch", async (req, res) => {
     try{
         const data = await pool.query(
-            "select userId, name, joining_year, Student_DOB from student where branch=$1;",
+            "select * from student where branch=$1;",
             [req.body.Branch]
         )
         res.json(data.rows);
@@ -270,7 +270,7 @@ router.post("/getStudentsByBranch", async (req, res) => {
 router.post("/getStudentsByYear", async (req, res) => {
     try{
         const data = await pool.query(
-            "select userid, name, student_dob, Branch from student where joining_year=$1;",
+            "select * from student where joining_year=$1;",
             [req.body.joining_year]
         )
         res.json(data.rows);
@@ -282,7 +282,7 @@ router.post("/getStudentsByYear", async (req, res) => {
 router.post("/getStudentsByBranchAndYear", async (req, res) => {
     try{
         const data = await pool.query(
-            "select userid, name, student_dob from student where branch=$1 and joining_year=$2;",
+            "select * from student where branch=$1 and joining_year=$2;",
             [req.body.Branch, req.body.joining_year]
         )
         res.json(data.rows);
