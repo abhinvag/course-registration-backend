@@ -18,11 +18,12 @@
 
 ## Admin
 
-| Type |      Route      |     Path Parameters      |            Description             |
-| :--: | :-------------: | :----------------------: | :--------------------------------: |
-| GET  |   /admin/list   |            -             | Get all the entries in admin table |
-| POST | /admin/register | userId, name, DOB, passw |        Register a new admin        |
-| POST |  /admin/verify  |      userId, passw       |    Verify password for a admin     |
+| Type |         Route         |     Path Parameters      |                        Description                        |
+| :--: | :-------------------: | :----------------------: | :-------------------------------------------------------: |
+| GET  |      /admin/list      |            -             |            Get all the entries in admin table             |
+| POST |    /admin/register    | userId, name, DOB, passw |                   Register a new admin                    |
+| POST |     /admin/verify     |      userId, passw       |                Verify password for a admin                |
+| POST | /admin/updatePassword | userId, passw, newpassw  | update password with new password using existing password |
 
 ## Course
 
@@ -35,6 +36,7 @@
 | POST |        /course/deleteCourse        |                           course_id                           | Delete all entries of course_id from courseEnrollment, availableCourses and course table |
 | POST |     /course/addAvailableCourse     |         course_id, semester, branch, totalSeats, grp          |               Add new availibility for a course in availableCourses table                |
 | POST | /course/addMultipleAvailableCourse | .xlsx file of ( course_id, semester, branch, totalSeats, grp) |                      Add multiple entries in availableCourses table                      |
+| POST |     /course/getAvailableSeats      |                  course_id, semester, branch                  |                             Get Seats available for a course                             |
 | POST |   /course/decreaseAvailableSeats   |                  course_id, semester, branch                  |                   Decreases seats available in a course by 1 if not 0                    |
 | POST |   /course/increaseAvailableSeats   |                  course_id, semester, branch                  |                        Increases seats available in a course by 1                        |
 | POST |      /course/updateTotalSeats      |                  course_id, semester, branch                  |                                    Update Total Seats                                    |

@@ -71,4 +71,44 @@ router.post('/verify', async function(req, res){ // verify password
     }
 })
 
+router.post('/updatePassword', async function(req, res){ // update password with the help of existing password
+    try{
+        const User = await pool.query(
+            "SELECT * FROM admin WHERE userId=$1",
+            [req.body.userId]
+        );
+        if(User.rowCount === 0) { // if user with given id do not exist
+            res.json("User Not Found");
+        }
+        else{
+            bcrypt.compare(req.body.passw, User.rows[0].passw, function(err, result) {
+                if(!err){
+                    if(result){
+                        bcrypt.hash(req.body.newpassw, saltRounds, async function(err, hash) {
+                            if(hash){
+                                await pool.query(
+                                    "UPDATE admin SET passw=$1 WHERE userId=$2",
+                                    [hash, req.body.userId]
+                                );
+                                res.json("Success");
+                            }
+                            else{
+                                res.json(err);
+                            }
+                        });
+                    }
+                    else{
+                        res.json("Incorrect Password");
+                    }
+                }
+                else{
+                    res.json(err);
+                }
+            });
+        }
+    }catch(err){
+        res.json(err);
+    }
+})
+
 module.exports = router;

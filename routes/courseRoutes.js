@@ -140,11 +140,24 @@ router.post("/addMultipleAvailableCourse", upload.single('file'), async (req, re
   }
 }) 
 
+router.post("/getAvailableSeats", async (req, res) => {
+  try{
+    var data = await pool.query(
+      "SELECT availableSeats from availableCourses WHERE course_id=$1 AND semester=$2 AND branch=$3;",
+      [req.body.course_id, req.body.semester, req.body.branch]
+    )
+    res.json(data.rows[0].availableseats);
+  }
+  catch(err){
+    res.json(err)
+  }
+})
+
 router.post("/decreaseAvailableSeats", async (req, res) => {
   try {
     var data = await pool.query(
-      "SELECT availableSeats from availableCourses WHERE course_id=$1;",
-      [req.body.course_id]
+      "SELECT availableSeats from availableCourses  WHERE course_id=$1 AND semester=$2 AND branch=$3;",
+      [req.body.course_id, req.body.semester, req.body.branch]
     )
     //res.json(data.rows[0].availableseats)
     if(data.rows[0].availableseats === 0){
@@ -152,7 +165,7 @@ router.post("/decreaseAvailableSeats", async (req, res) => {
     }
     else{
       await pool.query(
-        "UPDATE availableCourses SET availableSeats=$2 WHERE course_id=$1 AND semester=$2 AND branch=$3;",
+        "UPDATE availableCourses SET availableSeats=$4 WHERE course_id=$1 AND semester=$2 AND branch=$3;",
         [req.body.course_id, req.body.semester, req.body.branch, data.rows[0].availableseats-1]
       )
       res.json(data.rows[0].availableseats-1);
@@ -165,8 +178,8 @@ router.post("/decreaseAvailableSeats", async (req, res) => {
 router.post("/increaseAvailableSeats", async (req, res) => {
   try {
     var data = await pool.query(
-      "SELECT  from availableCourses WHERE course_id=$1;",
-      [req.body.course_id]
+      "SELECT availableSeats from availableCourses WHERE course_id=$1 AND semester=$2 AND branch=$3;",
+      [req.body.course_id, req.body.semester, req.body.branch]
     )
     //res.json(data.rows[0])
     if(data.rows[0].availableseats === data.rows[0].totalseats){
@@ -174,7 +187,7 @@ router.post("/increaseAvailableSeats", async (req, res) => {
     }
     else{
       await pool.query(
-        "UPDATE availableCourses SET availableSeats=$2 WHERE course_id=$1 AND semester=$2 AND branch=$3;",
+        "UPDATE availableCourses SET availableSeats=$4 WHERE course_id=$1 AND semester=$2 AND branch=$3;",
         [req.body.course_id, req.body.semester, req.body.branch, data.rows[0].availableseats+1]
       )
       res.json(data.rows[0].availableseats+1);
