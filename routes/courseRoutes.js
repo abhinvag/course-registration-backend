@@ -28,7 +28,7 @@ router.post("/addNewCourse", async (req, res) => {
   }
 })
 
-router.post("/addMultipleNewCourse", upload.single('file'), (req, res) => { 
+router.post("/addMultipleNewCourse", upload.single('file'), async (req, res) => { 
   try{
     const data = req.file.buffer;
     const wb = xlsx.read(data);
@@ -36,18 +36,15 @@ router.post("/addMultipleNewCourse", upload.single('file'), (req, res) => {
     const list = xlsx.utils.sheet_to_json(ws, {
         raw: false,
     });
-    list.map(async (course) => {
-      try{
+    const promises = list.map(async (course) => {
         await pool.query(
           "INSERT INTO course values ($1, $2, $3, $4);",
           [course.course_id, course.coursename, course.type, course.credits]
         );
-      }
-      catch(err){
-        res.json(err)
-      }
+        return "success";
     })
-    res.json("success");
+    const result = await Promise.all(promises);
+    res.json(result);
   }
   catch(err){
     res.json(err);
@@ -109,21 +106,18 @@ router.post("/addMultipleAvailableCourse", upload.single('file'), async (req, re
     const list = xlsx.utils.sheet_to_json(ws, {
         raw: false,
     });
-    list.map(async (course) => {
-      try{
-        await pool.query(
-          "INSERT INTO availableCourses VALUES ($1, $2, $3, $4, $5, $6);",
-          [course.course_id, course.semester, course.branch, course.totalSeats, course.totalSeats, course.grp]
-        )
-      }
-      catch(err){
-        res.json(err);
-      }
+    const promises = list.map(async (course) => {
+      await pool.query(
+        "INSERT INTO availableCourses VALUES ($1, $2, $3, $4, $5, $6);",
+        [course.course_id, course.semester, course.branch, course.totalSeats, course.totalSeats, course.grp]
+      )
+      return "success";
     })
-    res.json("success");
+    const result = await Promise.all(promises);
+    res.json(result);
   }
   catch(err){
-    res.send(err);
+    res.json(err);
   }
 })
 
@@ -298,18 +292,15 @@ router.post("/addMultipleEnrollment",upload.single('file'), async (req, res) => 
     const list = xlsx.utils.sheet_to_json(ws, {
         raw: false,
     });
-    list.map(async (enrollment) => {
-      try{
+    const promises = list.map(async (enrollment) => {
         await pool.query(
           "insert into courseEnrollment values ($1, $2);",
           [enrollment.course_id, enrollment.student_id]
         )
-      }
-      catch(err){
-        res.json(err);
-      }
+        return "success"
     })
-    res.json("success");
+    const result = await Promise.all(promises);
+    res.json(result);
   }
   catch(err){
     res.send(err);

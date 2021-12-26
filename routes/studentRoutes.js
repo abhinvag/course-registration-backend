@@ -51,7 +51,7 @@ router.post('/register', function(req, res){ // register user
     }
 })
 
-router.post('/registerMultiple', upload.single('file'), function(req, res){
+router.post('/registerMultiple', upload.single('file'), async function(req, res){
     try{
         const data = req.file.buffer;
         const wb = xlsx.read(data);
@@ -59,24 +59,28 @@ router.post('/registerMultiple', upload.single('file'), function(req, res){
         const list = xlsx.utils.sheet_to_json(ws, {
             raw: false,
         });
-        //console.log(list);
-        list.map((student) => {
+        const promises = list.map((student) => {
             let passw = student.passw;
             let stringPassw = passw.toString();
-            bcrypt.hash(stringPassw, saltRounds, async function(err, hash) {
+            const temp = bcrypt.hash(stringPassw, saltRounds, async function(err, hash) {
                 if(hash){
-                    await pool.query(
-                        "INSERT INTO student VALUES ($1, $2, $3, $4, $5, $6);",
-                        [student.userId, student.name, student.joining_year , student.Student_DOB, 
-                            student.Branch, hash]
-                    );
-                }
-                else{
-                    console.log(err);
+                    try{
+                        await pool.query(
+                            "INSERT INTO student VALUES ($1, $2, $3, $4, $5, $6);",
+                            [student.userId, student.name, student.joining_year , student.Student_DOB, 
+                                student.Branch, hash]
+                        );
+                        return "success"
+                    }
+                    catch(err){
+                        return err;
+                    }
                 }
             });
+            return temp;
         })
-        res.json("success")
+        const result = await Promise.all(promises);
+        res.json(result);
     }
     catch(err){
         res.json(err)
