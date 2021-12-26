@@ -59,7 +59,7 @@ router.post('/registerMultiple', upload.single('file'), async function(req, res)
             let stringPassw = passw.toString();
             const hash = await bcrypt.hash(stringPassw, saltRounds)
             student.passw = hash;
-            console.log(student);
+            //console.log(student);
             await pool.query(
                 "INSERT INTO student VALUES ($1, $2, $3, $4, $5, $6);",
                 [student.userId, student.name, student.joining_year , student.Student_DOB, 
