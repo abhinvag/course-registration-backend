@@ -11,11 +11,6 @@ require("dotenv").config();
 let router = express.Router();
 const saltRounds = 10;
 
-/*
-TODO:
-* Get List of Students by branch
-* Get List of Students by Sem
-*/
 
 router.get("/list", async (req, res) => { // list of all the entries in student table
     try {
@@ -59,25 +54,18 @@ router.post('/registerMultiple', upload.single('file'), async function(req, res)
         const list = xlsx.utils.sheet_to_json(ws, {
             raw: false,
         });
-        const promises = list.map((student) => {
+        const promises = list.map( async (student) => {
             let passw = student.passw;
             let stringPassw = passw.toString();
-            const temp = bcrypt.hash(stringPassw, saltRounds, async function(err, hash) {
-                if(hash){
-                    try{
-                        await pool.query(
-                            "INSERT INTO student VALUES ($1, $2, $3, $4, $5, $6);",
-                            [student.userId, student.name, student.joining_year , student.Student_DOB, 
-                                student.Branch, hash]
-                        );
-                        return "success"
-                    }
-                    catch(err){
-                        return err;
-                    }
-                }
-            });
-            return temp;
+            const hash = await bcrypt.hash(stringPassw, saltRounds)
+            student.passw = hash;
+            console.log(student);
+            await pool.query(
+                "INSERT INTO student VALUES ($1, $2, $3, $4, $5, $6);",
+                [student.userId, student.name, student.joining_year , student.Student_DOB, 
+                    student.Branch, hash]
+            );
+            return "success"
         })
         const result = await Promise.all(promises);
         res.json(result);
