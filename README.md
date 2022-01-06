@@ -44,7 +44,7 @@
 | POST |     /course/courseAvailibility     |                           course_id                           |                  Get all different availibility for a particular course                  |
 | POST |   /course/availableCoursesInSem    |                           semester                            |                              Get all courses in a semester                               |
 | POST | /course/availableCoursesForBranch  |                            branch                             |                               Get all courses for a branch                               |
-| POST |    /course/getCompulsoryCourses    |                        branch,semester                        |              Get list of all the compulsory courses for a sem branch combo               |
+| POST |       /course/getCoreCourses       |                        branch,semester                        |                 Get list of all the Core courses for a sem branch combo                  |
 | POST |     /course/getElectiveCourses     |                        branch,semester                        |               Get list of all the elective courses for a sem branch combo                |
 | POST |       /course/addEnrollment        |                     student_id, course_id                     |                               Add Enrollment for a student                               |
 | POST |   /course/addMultipleEnrollment    |            .xlsx file of ( student_id, course_id)             |                                 Add Multiple Enrollments                                 |

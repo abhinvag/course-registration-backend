@@ -17,7 +17,7 @@ create table student(
 create table course(
     course_id varchar(255) PRIMARY KEY,
     coursename varchar(255) UNIQUE, 
-    type varchar(255) CHECK (type='COMPULSORY' OR type='ELECTIVE'),
+    type varchar(255),
     credits INT
 );
 

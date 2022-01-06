@@ -245,10 +245,10 @@ router.post("/availableCoursesForBranch", async (req, res) => {
   }
 })
 
-router.post("/getCompulsoryCourses", async (req, res) => {
+router.post("/getCoreCourses", async (req, res) => {
   try{
     const data = await pool.query(
-      "select tbl1.course_id, coursename, credits from ( select * from course where type='COMPULSORY' ) tbl1 inner join ( select * from availablecourses where semester=$1 and branch=$2 ) tbl2 on tbl1.course_id = tbl2.course_id;",
+      "select tbl1.course_id, coursename, credits from ( select * from course where type='CORE' ) tbl1 inner join ( select * from availablecourses where semester=$1 and branch=$2 ) tbl2 on tbl1.course_id = tbl2.course_id;",
       [req.body.semester, req.body.branch]
     )
     res.json(data.rows);
