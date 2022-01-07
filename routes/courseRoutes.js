@@ -124,7 +124,7 @@ router.post("/addMultipleAvailableCourse", upload.single('file'), async (req, re
 /router.post("/updateTotalSeats", async (req, res) => {
   try{
     await pool.query(
-      "UPDATE availableCourses SET totalSeats=$4 WHERE course_id=$1 AND semester=$2 AND branch=$3",
+      "UPDATE availableCourses SET availableSeats=$4, totalSeats=$4 WHERE course_id=$1 AND semester=$2 AND branch=$3",
       [req.body.course_id, req.body.semester, req.body.branch, req.body.totalSeats]
     )
     res.json("success");
@@ -172,7 +172,7 @@ router.post("/decreaseAvailableSeats", async (req, res) => {
 router.post("/increaseAvailableSeats", async (req, res) => {
   try {
     var data = await pool.query(
-      "SELECT availableSeats from availableCourses WHERE course_id=$1 AND semester=$2 AND branch=$3;",
+      "SELECT * from availableCourses WHERE course_id=$1 AND semester=$2 AND branch=$3;",
       [req.body.course_id, req.body.semester, req.body.branch]
     )
     //res.json(data.rows[0])
